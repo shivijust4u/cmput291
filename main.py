@@ -41,12 +41,12 @@ def createTable():
         #curs.setinputsizes(32, int, float, int, int)
         #curs.executemany("INSERT INTO TOFFEES(T_NAME, SUP_ID, PRICE, SALES, TOTAL) "
         #"VALUES (:1, :2, :3, :4, :5)", data)
-        curs.execute("SELECT * FORM VEHICLE")
+        curs.execute("SELECT * FROM VEHICLE")
         #"VALUES('Quadbury',101,7.99,0,0)")
         connection.commit()
         
         # executing a query
-        curs.execute("SELECT * from VEHICLE")
+        curs.execute("SELECT * FROM VEHICLE")
         # get all data and print it
         rows = curs.fetchall()
         for row in rows:
