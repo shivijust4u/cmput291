@@ -40,7 +40,7 @@ def createTable():
         #curs.bindarraysize = 2
         #curs.setinputsizes(32, int, float, int, int)
         #curs.executemany("INSERT INTO TOFFEES(T_NAME, SUP_ID, PRICE, SALES, TOTAL) "
-                                    "VALUES (:1, :2, :3, :4, :5)", data)
+        #"VALUES (:1, :2, :3, :4, :5)", data)
         curs.execute("SELECT * FORM VEHICLE")
         #"VALUES('Quadbury',101,7.99,0,0)")
         connection.commit()
