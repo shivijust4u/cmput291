@@ -1,0 +1,252 @@
+<html>
+<head>
+<title>291 Project 1</title>
+<link rel="stylesheet" href="styles.css">
+<HTA:APPLICATION
+  APPLICATIONNAME="Project 1"
+  CAPTION="PCN Remote"
+  BORDER="dialog"
+  BORDERSTYLE="normal"
+  SELECTION="no"
+  NAVIGABLE="yes"
+  CONTEXTMENU="no"
+  SINGLEINSTANCE="yes"
+  MAXIMIZEBUTTON="no"
+  SYSMENU="yes"
+  WINDOWSTATE="normal"/>
+</head>
+
+<script language="VBScript">
+	Dim width,height,zoomPercentage,minimizedWidth
+
+	Sub Window_onLoad
+    	
+		width=1230
+		height=695
+
+		Self.ResizeTo width,height
+  		self.MoveTo (screen.AvailWidth-width)/2,(screen.AvailHeight-height)/2
+  		
+	End Sub
+</script>
+
+<script language = "JavaScript">
+	function ShowForm1(){
+		document.getElementById("container1").style.height = '88%';
+		document.getElementById("container1").style.width = '100%';
+		document.getElementById("container1").style.left = '0%';
+		document.getElementById("container1").style.top = '10%';
+
+		document.getElementById("container2").style.height = 0;
+		document.getElementById("container2").style.width = 0;
+		document.getElementById("container2").style.left = 0;
+		document.getElementById("container2").style.top = 0;
+
+		document.getElementById("container3").style.height = 0;
+		document.getElementById("container3").style.width = 0;
+		document.getElementById("container3").style.left = 0;
+		document.getElementById("container3").style.top = 0;
+
+		document.getElementById("container4").style.height = 0;
+		document.getElementById("container4").style.width = 0;
+		document.getElementById("container4").style.left = 0;
+		document.getElementById("container4").style.top = 0;
+	}
+	function ShowForm2(){
+		document.getElementById("container2").style.height = '88%';
+		document.getElementById("container2").style.width = '100%';
+		document.getElementById("container2").style.left = '0%';
+		document.getElementById("container2").style.top = '10%';
+
+		document.getElementById("container1").style.height = 0;
+		document.getElementById("container1").style.width = 0;
+		document.getElementById("container1").style.left = 0;
+		document.getElementById("container1").style.top = 0;
+
+		document.getElementById("container3").style.height = 0;
+		document.getElementById("container3").style.width = 0;
+		document.getElementById("container3").style.left = 0;
+		document.getElementById("container3").style.top = 0;
+		
+		document.getElementById("container4").style.height = 0;
+		document.getElementById("container4").style.width = 0;
+		document.getElementById("container4").style.left = 0;
+		document.getElementById("container4").style.top = 0;
+	}
+	function ShowForm3(){
+		document.getElementById("container3").style.height = '88%';
+		document.getElementById("container3").style.width = '100%';
+		document.getElementById("container3").style.left = '0%';
+		document.getElementById("container3").style.top = '10%';
+
+		document.getElementById("container2").style.height = 0;
+		document.getElementById("container2").style.width = 0;
+		document.getElementById("container2").style.left = 0;
+		document.getElementById("container2").style.top = 0;
+
+		document.getElementById("container1").style.height = 0;
+		document.getElementById("container1").style.width = 0;
+		document.getElementById("container1").style.left = 0;
+		document.getElementById("container1").style.top = 0;
+		
+		document.getElementById("container4").style.height = 0;
+		document.getElementById("container4").style.width = 0;
+		document.getElementById("container4").style.left = 0;
+		document.getElementById("container4").style.top = 0;
+	}
+	function ShowForm4(){
+		document.getElementById("container4").style.height = '88%';
+		document.getElementById("container4").style.width = '100%';
+		document.getElementById("container4").style.left = '0%';
+		document.getElementById("container4").style.top = '10%';
+
+		document.getElementById("container2").style.height = 0;
+		document.getElementById("container2").style.width = 0;
+		document.getElementById("container2").style.left = 0;
+		document.getElementById("container2").style.top = 0;
+
+		document.getElementById("container3").style.height = 0;
+		document.getElementById("container3").style.width = 0;
+		document.getElementById("container3").style.left = 0;
+		document.getElementById("container3").style.top = 0;
+		
+		document.getElementById("container1").style.height = 0;
+		document.getElementById("container1").style.width = 0;
+		document.getElementById("container1").style.left = 0;
+		document.getElementById("container1").style.top = 0;
+	}
+</script>
+
+<body scroll="NO" id="bgbody">
+
+<!--Area 1, Input Form Selection-->
+<table border="1" bgcolor="white" id="table0" frame="rhs">
+	<tr>
+	  	<td align="center" style="border-right:2 solid gray">
+			<input type="button" id="vehicle_reg_button" value="Vehicle Registration" onClick="ShowForm1" width="222" height="45">
+		</td>
+		<td align="center">
+			<input type="button" id="transaction_button" value="Auto Transaction" onClick="ShowForm2" width="222" height="45">
+		</td>
+		<td align="center">
+			<input type="button" id="license_reg_button" value="License Registration" onClick="ShowForm3" width="222" height="45">
+		</td>
+		<td align="center">
+			<input type="button" id="violation_record_button" value="Violation Record" onClick="ShowForm4" width="222" height="45">
+		</td>
+	</tr>
+</table>
+<div id="container1">
+	<table border="1" bgcolor="white" id="table1" frame="rhs">
+		<tr>
+			<td>Officer: <input type="text" id="officer_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Owner: <input type="text" id="owner_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Is Primary Owner: <input type="checkbox" id="primary_owner_box" value=""></td>
+		</tr>
+		<tr>
+			<td>Serial No.: <input type="text" id="vehicle_serial_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Maker: <input type="text" id="maker_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Model: <input type="text" id="model_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Year: <input type="text" id="year_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Color: <input type="text" id="color_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Type_ID: <input type="text" id="type_text" value="" width="222" height="45"></td>
+		</tr>
+	</table>
+</div>
+<div id="container2">
+	<table border="1" bgcolor="white" id="table2" frame="rhs">
+		<tr>
+			<td>Officer: <input type="text" id="officer_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Transaction ID: <input type="text" id="transaction_id_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Seller: <input type="text" id="seller_id_text" value=""></td>
+		</tr>
+		<tr>
+			<td>Buyer: <input type="text" id="buyer_id_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Vehicle ID: <input type="text" id="vehicle_id_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Date: <input type="text" id="date_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Price: <input type="text" id="price_text" value="" width="222" height="45"></td>
+		</tr>
+	</table>
+</div>
+<div id="container3">
+	<table border="1" bgcolor="white" id="table3" frame="rhs">
+		<tr>
+			<td>Officer: <input type="text" id="officer_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>License No.<input type="text" id="license_id_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>SIN: <input type="text" id="sin_text" value=""></td>
+		</tr>
+		<tr>
+			<td>Class: <input type="text" id="class_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Photo: <input type="button" id="photo_upload_button" value="upload" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Issued Date: <input type="text" id="issused_date_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Expire Date: <input type="text" id="expire_date_text" value="" width="222" height="45"></td>
+		</tr>
+	</table>
+</div>
+<div id="container4">
+	<table border="1" bgcolor="white" id="table4" frame="rhs">
+		<tr>
+			<td>Officer: <input type="text" id="officer_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Ticket No. <input type="text" id="ticket_number_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Violator ID: <input type="text" id="violator_text" value=""></td>
+		</tr>
+		<tr>
+			<td>Vehicle No.: <input type="text" id="vehicle_number_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Officer No.: <input type="text" id="officer_number_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Type: <input type="text" id="type_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Date: <input type="text" id="vio_date_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Place: <input type="text" id="place_text" value="" width="222" height="45"></td>
+		</tr>
+		<tr>
+			<td>Descriptions: <input type="text" id="descriptions_text" value="" width="222" height="45"></td>
+		</tr>	
+	</table>
+</div>
+</body>
+</html>
