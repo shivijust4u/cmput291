@@ -176,11 +176,9 @@ class GeneralSearchPage(object):
 class ViolationsSearchPage(object):
     """docstring for ClassName
 
-
         List all violation records received by a person 
         if  the drive licence_no or sin of a person  
         is entered.
-
 
     """
     def __init__(self, master):
