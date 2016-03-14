@@ -1,4 +1,5 @@
 from Tkinter import *
+#from database_class import Database
 
 
 class DriverLicencePage(object):
@@ -47,7 +48,7 @@ class DriverLicencePage(object):
                 self.image  = f_image.read()
                 print("image succesfully read!\n should send to database to insert")
             
-            print "Form {}".format(n)
+            print "{}: ".format(self.formText[n])
             print entry.get()
             n +=1
 

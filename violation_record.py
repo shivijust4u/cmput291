@@ -30,20 +30,20 @@ class ViolationRecordPage(object):
 
         self.pageTitle = self.makeTitle(frame, "Violation Record", 0, 1)
 
-        self.submitButton = Button(frame, text="Submit", command=self.submitCB)
+        self.submitButton = Button(frame, text="Submit", command=self.submitCallBack)
         self.submitButton.grid(row=10, column=1)
 
-        self.homeButton = Button(frame, text="Home", command=self.homeCB)
+        self.homeButton = Button(frame, text="Home", command=self.homeCallBack)
         self.homeButton.grid(row=10, column=2)
 
         self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
-    def homeCB(self):
+    def homeCallBack(self):
         print "Home"
         self.successor = 0
 
-    def submitCB(self):
+    def submitCallBack(self):
         print "Process Data Here..."
         for entry in self.entries:
             print "Entry: "

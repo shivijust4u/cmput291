@@ -10,6 +10,11 @@ class VehicleRegPage(object):
         self.successor = -1
         self.makeForm(frame)
 
+        for entry in self.entries:
+            entry.insert(0,"null")
+
+
+
         self.pageTitle = self.makeTitle(frame, "Register a New Vehicle", 0, 1)
 
         self.submitButton = Button(frame, text="Submit", command=self.submitCB)
@@ -33,7 +38,8 @@ class VehicleRegPage(object):
         #self.displayResults("Success", 40, 0)
         self.makePersonalForm(self.frame)
         self.displayResults("Please Enter Driver Information", 16, 1)
-
+        for entry in self.personalEntries:
+            entry.insert(0,"null")        
         self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.submitCB2)
         self.submitButton2.grid(row=50, column=1)
 

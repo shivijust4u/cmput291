@@ -44,6 +44,9 @@ class AutoTransactionPage(object):
             print self.formText[n]
             print entry.get()
             n += 1
+        #newFrame = Frame(self.frame)
+        #newFrame.grid()
+        #Button(newFrame, text="TEXT").grid(row=0,column=0)
 
         # delete previous owner entry in database
         # update new owner entry in database
