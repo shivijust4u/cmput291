@@ -1,52 +1,52 @@
 from Tkinter import *
+import getpass # the package for getting password from user without displaying it
 
 
-class AutoTransactionPage(object):
+class LogInPage(object):
     """docstring for ClassName"""
     def __init__(self, master):
         frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
+        self.entries = None
+        submitCB()
 
-        self.frame = frame
-        self.formText = ["Seller Name: ","Buyer Name: ","Date: ","Price: "]
-        self.forms = self.makeForm(frame)
-        for entry in self.entries:
-            entry.insert(0,"null")
+        # self.frame = frame
+        # self.formText = ["Username","Password"]
+        # self. forms = self.makeForm(frame)
 
+        # self.pageTitle = self.makeTitle(frame, "Log In Screen", 0, 1)
 
-        self.entries[0].delete(0, END)    
-        self.entries[2].delete(0, END)    
+        # self.submitButton = Button(frame, text="Login", command=self.submitCB)
+        # self.submitButton.grid(row=10, column=1)
 
-        self.entries[2].insert(20, "(YYYY-MM-DD)")
+        # self.homeButton = Button(frame, text="Home", command=self.homeCB)
+        # self.homeButton.grid(row=10, column=2)
 
-        self.pageTitle = self.makeTitle(frame, "New Auto Transaction", 0, 1)
-
-        self.submitButton = Button(frame, text="Submit", command=self.submitCallBack)
-        self.submitButton.grid(row=10, column=1)
-
-        self.homeButton = Button(frame, text="Home", command=self.homeCB)
-        self.homeButton.grid(row=10, column=2)
-
-        self.quitButton = Button(frame, text="Quit", command=frame.quit)
-        self.quitButton.grid(row=10, column=0)
-
+        # self.quitButton = Button(frame, text="Quit", command=frame.quit)
+        # self.quitButton.grid(row=10, column=0)
 
     def homeCB(self):
         print "Home"
         self.successor = 0
 
-    def submitCallBack(self):
+    def submitCB(self):
         print "Process Data Here..."
-        n=0
         for entry in self.entries:
-            print self.formText[n]
+            print "Entry: "
             print entry.get()
-            n += 1
 
-        # delete previous owner entry in database
-        # update new owner entry in database
-         
+        # get username
+        user = input("Username [%s]: " % getpass.getuser())
+        if not user:
+            user=getpass.getuser()
+    
+        # get password
+        pw = getpass.getpass()
+
+        # The URL we are connnecting to
+        conString=''+user+'/' + pw +'@gwynne.cs.ualberta.ca:1521/CRS'
+        print user
 
     def makeButton(self, parent, caption, width, row, column):
         button = Button(parent, text=caption, command=submitCallback)
@@ -68,12 +68,10 @@ class AutoTransactionPage(object):
 
     def makeForm(self, parent):
         baseRow = 2
-
         self.entries = []
         for text in self.formText:
-            self.entries.append(self.makeentry(parent, text, 40, baseRow, [0,1]))
+            self.entries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
             baseRow += 1
-
 
     def quit(self):
         self.frame.destroy()

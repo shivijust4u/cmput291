@@ -30,12 +30,25 @@ class VehicleRegPage(object):
         for entry in self.entries:
             print "Entry: "
             print entry.get()
-        self.displayResults("Success")
+        #self.displayResults("Success", 40, 0)
+        self.makePersonalForm(self.frame)
+        self.displayResults("Please Enter Driver Information", 16, 1)
 
-    def displayResults(self, text):
+        self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.submitCB2)
+        self.submitButton2.grid(row=50, column=1)
+
+    def submitCB2(self):
+        print "submitted personal data..."
+        for entry in self.personalEntries:
+            print "Entry: "
+            print entry.get()
+
+
+
+    def displayResults(self, text, row, column):
         resultText = text
         self.searchResults = Label(self.frame, text=resultText)
-        self.searchResults.grid(row=40, column=0)
+        self.searchResults.grid(row=row, column=column)
 
     def makeButton(self, parent, caption, width, row, column):
         button = Button(parent, text=caption, command=submitCallback)
@@ -67,5 +80,13 @@ class VehicleRegPage(object):
         self.makeentry(parent, "year", 40, 5, [0,1]),
         self.makeentry(parent, "color", 40, 6, [0,1]),
         self.makeentry(parent, "type_id", 40, 7, [0,1])]
-  
+    
+    def makePersonalForm(self, parent):
+        self.personalFormText = ["sin", "name", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
+        
+        baseRow = 20
+        self.personalEntries = []
+        for text in self.personalFormText:
+            self.personalEntries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
+            baseRow += 1            
 

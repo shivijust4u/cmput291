@@ -5,6 +5,9 @@ from search_engine import MainSearchPage, GeneralSearchPage, ViolationsSearchPag
 from auto_transaction import AutoTransactionPage
 from violation_record import ViolationRecordPage
 from driver_licence import DriverLicencePage
+from log_in import LogInPage
+import getpass # the package for getting password from user without displaying it
+
 
 ###---   PROGRAM LOGIC  ---###
 
@@ -32,71 +35,79 @@ Page Ordering:
 """
 
 
-root = Tk()
 
+class App(object):
+    """docstring for ClassName"""
+    def __init__(self):
+        self.root = Tk()
+        self.root.geometry('{}x{}'.format(1000, 600))
 
-page = MainMenu(root)
+        #self.page = LogInPage(self.root)
 
+        self.page = MainMenu(self.root)
 
-#search = SearchPage(root)
+        self.root.after(300, self.task)
+        self.root.mainloop()
 
-#main.quit()
+    def task(self):
+        
 
-#newpage = VehicleRegPage(root)
+        if self.page.successor != -1:
+            if self.page.successor == 0:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = MainMenu(self.root)
 
+            if self.page.successor == 1:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = VehicleRegPage(self.root)
 
-def task():
-    global page
+            elif self.page.successor == 2:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = AutoTransactionPage(self.root)
+
+            elif self.page.successor == 3:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = DriverLicencePage(self.root)
+
+            elif self.page.successor == 4:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = ViolationRecordPage(self.root)
+
+            elif self.page.successor == 5:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = MainSearchPage(self.root)
+
+            elif self.page.successor == 6:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = GeneralSearchPage(self.root)
+
+            elif self.page.successor == 7:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = ViolationsSearchPage(self.root)
+
+            elif self.page.successor == 8:
+                self.page.quit()
+                self.page.successor = -1 # Reset flag
+                self.page = VehicleHistorySearchPage(self.root)
+
+        self.root.after(300, self.task)  # reschedule event in 0.3 seconds
+
     
-    if page.successor != -1:
-        if page.successor == 0:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = MainMenu(root)
 
-        if page.successor == 1:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = VehicleRegPage(root)
+"""
+Main Tkinter Object window
+"""
 
-        elif page.successor == 2:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = AutoTransactionPage(root)
+if __name__=="__main__":
+    app = App()
 
-        elif page.successor == 3:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = DriverLicencePage(root)
-
-        elif page.successor == 4:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = ViolationRecordPage(root)
-
-        elif page.successor == 5:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = MainSearchPage(root)
-
-        elif page.successor == 6:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = GeneralSearchPage(root)
-
-        elif page.successor == 7:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = ViolationsSearchPage(root)
-
-        elif page.successor == 8:
-            page.quit()
-            page.successor = -1 # Reset flag
-            page = SearchVehicleHistory(root)
-
-    root.after(700, task)  # reschedule event in 1 seconds
-
-root.after(700, task)
-root.mainloop()
 
 
