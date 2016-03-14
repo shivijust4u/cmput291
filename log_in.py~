@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import *
 import getpass # the package for getting password from user without displaying it
 
 
@@ -9,22 +9,22 @@ class LogInPage(object):
         frame.grid()
         self.successor = -1
         self.entries = None
+        submitCB()
 
+        # self.frame = frame
+        # self.formText = ["Username","Password"]
+        # self. forms = self.makeForm(frame)
 
-        self.frame = frame
-        self.formText = ["Username","Password"]
-        self. forms = self.makeForm(frame)
+        # self.pageTitle = self.makeTitle(frame, "Log In Screen", 0, 1)
 
-        self.pageTitle = self.makeTitle(frame, "Log In Screen", 0, 1)
+        # self.submitButton = Button(frame, text="Login", command=self.submitCB)
+        # self.submitButton.grid(row=10, column=1)
 
-        self.submitButton = Button(frame, text="Login", command=self.submitCB)
-        self.submitButton.grid(row=10, column=1)
+        # self.homeButton = Button(frame, text="Home", command=self.homeCB)
+        # self.homeButton.grid(row=10, column=2)
 
-        self.homeButton = Button(frame, text="Home", command=self.homeCB)
-        self.homeButton.grid(row=10, column=2)
-
-        self.quitButton = Button(frame, text="Quit", command=frame.quit)
-        self.quitButton.grid(row=10, column=0)
+        # self.quitButton = Button(frame, text="Quit", command=frame.quit)
+        # self.quitButton.grid(row=10, column=0)
 
     def homeCB(self):
         print("Home")

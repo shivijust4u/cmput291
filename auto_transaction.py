@@ -1,10 +1,10 @@
-from Tkinter import *
-
+from tkinter import *
+import quit
 
 class AutoTransactionPage(object):
     """docstring for ClassName"""
     def __init__(self, master):
-        frame = Frame(master, bg = "white", width = 500, height = 500)
+        frame = Frame(master, width = 500, height = 500)
         frame.grid()
         self.successor = -1
 
@@ -29,28 +29,22 @@ class AutoTransactionPage(object):
         self.homeButton = Button(frame, text="Home", command=self.homeCB)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=frame.quit)
+        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
         self.quitButton.grid(row=10, column=0)
 
 
     def homeCB(self):
-        print "Home"
+        print("Home")
         self.successor = 0
 
     def submitCallBack(self):
-        print "Process Data Here..."
         n=0
         for entry in self.entries:
             #print self.formText[n]
             #print entry.get()
             self.formData[self.formText[n]] = entry.get()
             n += 1
-        
-            print 
-        #for key, value in self.formData.iteritems():
-        #            print key, value
-
-
+                 
         # delete previous owner entry in database
         # update new owner entry in database
          

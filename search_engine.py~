@@ -1,10 +1,10 @@
-from tkinter import *
-import quit
+from Tkinter import *
+
 
 class MainSearchPage(object):
     """docstring for ClassName"""
     def __init__(self, master):
-        frame = Frame(master, width = 1000, height = 1000)
+        frame = Frame(master, bg = "white", width = 1000, height = 1000)
         frame.grid()
         self.frame = frame
         self.successor = -1
@@ -28,7 +28,7 @@ class MainSearchPage(object):
         self.homeButton = Button(frame, text="Home", command=self.callbackHome)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
     def callbackHome(self):
@@ -78,7 +78,7 @@ class GeneralSearchPage(object):
 
     """
     def __init__(self, master):
-        frame = Frame(master, width = 1000, height = 1000)
+        frame = Frame(master, bg = "white", width = 1000, height = 1000)
         frame.grid()
         self.frame = frame
         self.successor = -1
@@ -97,7 +97,7 @@ class GeneralSearchPage(object):
         self.homeButton = Button(frame, text="Home", command=self.callbackHome)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
 
@@ -109,9 +109,7 @@ class GeneralSearchPage(object):
         #resultText = "\t\tResults:\nMake: Ford\nModel: Focus\nYear: 1990"
         resultTitle = self.displayResults("Search Results: ", 39, 1)
         resultTitle.grid(columnspan=4)
-		
-		#resultsSet = session.db.execute_sql("SELECT")		
-	
+
         self.nullData = []
         for text in self.resultText:
             self.nullData.append("null")
@@ -184,7 +182,7 @@ class ViolationsSearchPage(object):
 
     """
     def __init__(self, master):
-        frame = Frame(master, width = 1000, height = 1000)
+        frame = Frame(master, bg = "white", width = 1000, height = 1000)
         frame.grid()
         self.frame = frame
         self.successor = -1
@@ -208,7 +206,7 @@ class ViolationsSearchPage(object):
         self.homeButton = Button(frame, text="Home", command=self.callbackHome)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
 
@@ -282,7 +280,7 @@ class VehicleHistorySearchPage(object):
 
     """
     def __init__(self, master):
-        frame = Frame(master, width = 1000, height = 1000)
+        frame = Frame(master, bg = "white", width = 1000, height = 1000)
         frame.grid()
         self.frame = frame
         self.successor = -1
@@ -305,7 +303,7 @@ class VehicleHistorySearchPage(object):
         self.homeButton = Button(frame, text="Home", command=self.callbackHome)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
     def callbackHome(self):

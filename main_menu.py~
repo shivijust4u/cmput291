@@ -1,5 +1,5 @@
-from tkinter import *
-import quit
+from Tkinter import *
+
 
 class MainMenu(object):
     """docstring for ClassName
@@ -14,7 +14,7 @@ class MainMenu(object):
     """
 
     def __init__(self, master):
-        frame = Frame(master, width = 500, height = 500)
+        frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.frame = frame
 
@@ -29,6 +29,7 @@ class MainMenu(object):
 
         self.pageTitle = self.makeTitle(frame, "Main Menu", 0, 2)
         self.pageTitle.config(justify=CENTER)
+
         self.buttons = [self.makeButton(self.frame, self.buttonText[0], 15, 5,0),
                         self.makeButton(self.frame, self.buttonText[1], 15, 5,1),
                         self.makeButton(self.frame, self.buttonText[2], 15, 5,2),
@@ -42,7 +43,7 @@ class MainMenu(object):
         self.buttons[3].config(command=self.callback3)
         self.buttons[4].config(command=self.callback4)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=2)
    
     def callback0(self):

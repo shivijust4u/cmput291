@@ -1,5 +1,5 @@
-from tkinter import *
-import quit
+from Tkinter import *
+
 
 class ViolationRecordPage(object):
     """docstring for ClassName
@@ -16,7 +16,7 @@ class ViolationRecordPage(object):
     """
     
     def __init__(self, master):
-        frame = Frame(master, width = 500, height = 500)
+        frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
         self.formData = {}
@@ -38,7 +38,7 @@ class ViolationRecordPage(object):
         self.homeButton = Button(frame, text="Home", command=self.homeCallBack)
         self.homeButton.grid(row=10, column=2)
 
-        self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
+        self.quitButton = Button(frame, text="Quit", command=frame.quit)
         self.quitButton.grid(row=10, column=0)
 
     def homeCallBack(self):
