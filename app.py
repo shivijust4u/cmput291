@@ -41,15 +41,16 @@ class App(object):
     def __init__(self):
         self.root = Tk()
         self.root.geometry('{}x{}'.format(1000, 600))
+        self.root.wm_title("CMPUT 291 Database Application")
 
         #self.page = LogInPage(self.root)
 
         self.page = MainMenu(self.root)
 
-        self.root.after(300, self.task)
+        self.root.after(300, self.mainTask)
         self.root.mainloop()
 
-    def task(self):
+    def mainTask(self):
         
 
         if self.page.successor != -1:
@@ -98,7 +99,7 @@ class App(object):
                 self.page.successor = -1 # Reset flag
                 self.page = VehicleHistorySearchPage(self.root)
 
-        self.root.after(300, self.task)  # reschedule event in 0.3 seconds
+        self.root.after(300, self.mainTask)  # reschedule event in 0.3 seconds
 
     
 

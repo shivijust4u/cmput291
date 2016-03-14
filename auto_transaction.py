@@ -15,7 +15,8 @@ class AutoTransactionPage(object):
             entry.insert(0,"null")
 
 
-        self.entries[0].delete(0, END)    
+        self.entries[0].delete(0, END)
+        self.entries[1].delete(0,END)    
         self.entries[2].delete(0, END)    
 
         self.entries[2].insert(20, "(YYYY-MM-DD)")

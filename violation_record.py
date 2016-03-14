@@ -2,14 +2,26 @@ from Tkinter import *
 
 
 class ViolationRecordPage(object):
-    """docstring for ClassName"""
+    """docstring for ClassName
+
+        This component is used by a police officer to 
+        issue a traffic ticket and record the violation. 
+        You may assume that all the information about 
+        ticket_type has been loaded in the 
+        initial database.
+
+        ticket( ticket_no, violator_no,vehicle_no,
+            office_no,vtype,vdate,place,descriptions )
+
+
+    """
     def __init__(self, master):
         frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
 
         self.frame = frame
-        self.formText = ["NULL","NULL","NULL","NULL","NULL"]
+        self.formText = ["ticket_no","violator_no","vehicle_no","office_no","vtype", "vdate", "place", "descriptions"]
         self. forms = self.makeForm(frame)
 
         self.pageTitle = self.makeTitle(frame, "Violation Record", 0, 1)

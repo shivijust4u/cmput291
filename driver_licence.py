@@ -2,14 +2,18 @@ from Tkinter import *
 
 
 class DriverLicencePage(object):
-    """docstring for ClassName"""
+    """docstring for ClassName
+
+        drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date)
+
+    """
     def __init__(self, master):
         frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
 
         self.frame = frame
-        self.formText = ["NULL","NULL","NULL","NULL","NULL"]
+        self.formText = ["licence_no","sin","class","photo url","issuing_date", "expiring_date"]
         self. forms = self.makeForm(frame)
 
         self.pageTitle = self.makeTitle(frame, "New Driver Licence", 0, 1)
