@@ -8,12 +8,12 @@ class AutoTransactionPage(object):
         frame.grid()
         self.successor = -1
 
+        self.formData = {}
         self.frame = frame
         self.formText = ["Seller Name: ","Buyer Name: ","Date: ","Price: "]
         self.forms = self.makeForm(frame)
         for entry in self.entries:
             entry.insert(0,"null")
-
 
         self.entries[0].delete(0, END)
         self.entries[1].delete(0,END)    
@@ -41,12 +41,15 @@ class AutoTransactionPage(object):
         print "Process Data Here..."
         n=0
         for entry in self.entries:
-            print self.formText[n]
-            print entry.get()
+            #print self.formText[n]
+            #print entry.get()
+            self.formData[self.formText[n]] = entry.get()
             n += 1
-        #newFrame = Frame(self.frame)
-        #newFrame.grid()
-        #Button(newFrame, text="TEXT").grid(row=0,column=0)
+        
+            print 
+        #for key, value in self.formData.iteritems():
+        #            print key, value
+
 
         # delete previous owner entry in database
         # update new owner entry in database

@@ -6,9 +6,7 @@ import getpass # the package for getting password from user without displaying i
 
 class Database():
     """docstring for DataBase"""
-    def __init__(self, statement):
-
-        self.statement = statement
+    def __init__(self):
 
         # get username
         user = input("Username [%s]: " % getpass.getuser())
@@ -31,12 +29,12 @@ class Database():
         self.connection.close()
 
 
-    def passive_update(self):
+    def passive_update(self, statement):
 
         try:        
 
             # Execute the desired statement 
-            curs.execute(self.statement)
+            curs.execute(statement)
             connection.commit()
             return True
 
@@ -47,7 +45,7 @@ class Database():
             return False
 
 
-    def result_set_update(self):
+    def result_set_update(self, statement):
 
         try:
             # Establish a connection in Python
@@ -57,7 +55,7 @@ class Database():
             curs = connection.cursor()
 
             # Execute the desired statement 
-            curs.execute(self.statement)
+            curs.execute(statement)
             connection.commit()
 
             # get all data and print it

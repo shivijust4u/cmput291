@@ -14,10 +14,12 @@ class ViolationRecordPage(object):
             office_no,vtype,vdate,place,descriptions )
 
     """
+    
     def __init__(self, master):
         frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
+        self.formData = {}
 
         self.frame = frame
         self.formText = ["ticket_no","violator_no","vehicle_no","office_no","vtype", "vdate", "place", "descriptions"]

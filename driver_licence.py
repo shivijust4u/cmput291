@@ -1,5 +1,5 @@
 from Tkinter import *
-#from database_class import Database
+from database_class import Database
 
 
 class DriverLicencePage(object):
@@ -12,6 +12,7 @@ class DriverLicencePage(object):
         frame = Frame(master, bg = "white", width = 500, height = 500)
         frame.grid()
         self.successor = -1
+        self.formData = {}
 
         self.frame = frame
         self.formText = ["licence_no","sin","class","photo name","issuing_date", "expiring_date"]
@@ -42,19 +43,14 @@ class DriverLicencePage(object):
         n=0
         for entry in self.entries:
             if (self.formText[n] == "photo name"):
-                #(Assumes a file by this name exists 
-                #in the directory you are running from)
+
                 f_image  = open(entry.get(),'rb')
                 self.image  = f_image.read()
-                print("image succesfully read!\n should send to database to insert")
-            
-            print "{}: ".format(self.formText[n])
-            print entry.get()
-            n +=1
 
-        
-        
-        
+            self.formData[self.formText[n]] = entry.get()            
+            n +=1
+        print self.formData;
+
 
     def makeButton(self, parent, caption, width, row, column):
         button = Button(parent, text=caption, command=submitCallback)

@@ -9,6 +9,7 @@ class VehicleRegPage(object):
         self.frame = frame
         self.successor = -1
         self.makeForm(frame)
+        self.formData = {}
 
         for entry in self.entries:
             entry.insert(0,"null")
