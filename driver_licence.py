@@ -13,8 +13,13 @@ class DriverLicencePage(object):
         self.successor = -1
 
         self.frame = frame
-        self.formText = ["licence_no","sin","class","photo url","issuing_date", "expiring_date"]
-        self. forms = self.makeForm(frame)
+        self.formText = ["licence_no","sin","class","photo name","issuing_date", "expiring_date"]
+        self.forms = self.makeForm(frame)
+
+        self.entries[2].insert(0, "null")
+        self.entries[3].insert(0, "mugshot.png")
+        self.entries[4].insert(0, "null")
+        self.entries[5].insert(0, "null")
 
         self.pageTitle = self.makeTitle(frame, "New Driver Licence", 0, 1)
 
@@ -33,9 +38,22 @@ class DriverLicencePage(object):
 
     def submitCB(self):
         print "Process Data Here..."
+        n=0
         for entry in self.entries:
-            print "Entry: "
+            if (self.formText[n] == "photo name"):
+                #(Assumes a file by this name exists 
+                #in the directory you are running from)
+                f_image  = open(entry.get(),'rb')
+                self.image  = f_image.read()
+                print("image succesfully read!\n should send to database to insert")
+            
+            print "Form {}".format(n)
             print entry.get()
+            n +=1
+
+        
+        
+        
 
     def makeButton(self, parent, caption, width, row, column):
         button = Button(parent, text=caption, command=submitCallback)

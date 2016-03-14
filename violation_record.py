@@ -13,7 +13,6 @@ class ViolationRecordPage(object):
         ticket( ticket_no, violator_no,vehicle_no,
             office_no,vtype,vdate,place,descriptions )
 
-
     """
     def __init__(self, master):
         frame = Frame(master, bg = "white", width = 500, height = 500)
@@ -22,7 +21,12 @@ class ViolationRecordPage(object):
 
         self.frame = frame
         self.formText = ["ticket_no","violator_no","vehicle_no","office_no","vtype", "vdate", "place", "descriptions"]
-        self. forms = self.makeForm(frame)
+        self.forms = self.makeForm(frame)
+
+        for entry in self.entries:
+            entry.insert(0,"null")
+        self.entries[0].delete(0,END)
+        self.entries[1].delete(0,END)
 
         self.pageTitle = self.makeTitle(frame, "Violation Record", 0, 1)
 
