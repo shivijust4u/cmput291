@@ -8,15 +8,15 @@ class Database():
 	def __init__(self):
 
 		# get username
-		user = input("Username [%s]: " % getpass.getuser())
-		if not user:
-				user=getpass.getuser()
+		#user = input("Username [%s]: " % getpass.getuser())
+		#if not user:
+				#user=getpass.getuser()
 		
 		# get password
-		pw = getpass.getpass()
+		#pw = getpass.getpass()
 
 		# The URL we are connnecting to
-		conString=''+user+'/' + pw +'@gwynne.cs.ualberta.ca:1521/CRS'
+		conString=''+"dfagnan" +'/' + "Costaece963" +'@gwynne.cs.ualberta.ca:1521/CRS'
 		
 		self.connection = cx_Oracle.connect(conString)
 

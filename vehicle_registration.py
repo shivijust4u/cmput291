@@ -13,7 +13,7 @@ class VehicleRegPage(object):
 		self.formData = {}
 		self.ownerFormData = {}
 		self.personalFormData = {}
-		self.formText = ["serial_no", "make", "model", "year", "color", "type_id"]
+		self.formText = ["serial_no", "maker", "model", "year", "color", "type_id"]
 		self.makeForm(frame)
 		self.pageTitle = self.makeTitle(frame, "Register a New Vehicle", 0, 1)
 
@@ -36,29 +36,37 @@ class VehicleRegPage(object):
 			self.formData[self.formText[n]] = entry.get()
 			n+=1
 		#print(self.formData)
-		querry = "SELECT serial_no FROM vehicle where serial_no = " + str(self.formData["serial_no"])
-		
+		querry = "SELECT serial_no FROM vehicle where serial_no = '" + str(self.formData["serial_no"] )+ "'"     
 		validation = False
-		if self.formData["serial_no"]:		
+		notNull = True
+		if self.formData["serial_no"] and notNull:      
 			validation = self.validateForm(querry)
+
+		for entry in self.entries:
+			if not entry.get():
+				entry.insert(0,"null")
+
+		print(self.entries[0].get())
+		if self.entries[0].get() == "null":
+			print("Serial_no cannot be null")
+			notNull = False 
 		
-		if validation:
-			if self.errorMsg:			
-				self.errorMsg.config(text="Vehicle Not In Database")
+		if validation and notNull:
+
+			for entry in self.entries:
+				entry.config(state=DISABLED)
 			self.submitButton.config(state=DISABLED)
-			#self.displayResults("Success", 40, 0)
+
 			self.makeOwnerForm(self.frame)
 			self.displayResults("Please Enter Owner Information", 25, 1)
-
 
 			self.ownerEntries[1].insert(0, self.formData["serial_no"])
 		
 			self.submitOwnerButton = Button(self.frame, text="Submit Owner Data", command=self.submitOwnerCallback)
 			self.submitOwnerButton.grid(row=29, column=1)
+		elif notNull:
+			print("Vehicle already registered")
 		
-		else:
-			if self.formData["serial_no"]:
-				self.errorMsg = self.displayResults( "Vehicle already registered", 8, 1)
 	
 	def validateForm(self, statement):                  
 		rs = session.db.execute_sql(statement)
@@ -73,11 +81,24 @@ class VehicleRegPage(object):
 		for entry in self.ownerEntries:
 			self.ownerFormData[self.ownerFormText[n]] = entry.get()
 			n+=1
-		querry = "SELECT sin from people where sin = " + str(self.ownerFormData["owner_id"])    
-		validation = self.validateForm(querry)
+		querry = "SELECT sin from people where sin = " + str(self.ownerFormData["owner_id"])
+		validation = False
+		notNull = True
+
+		for entry in self.ownerEntries:
+			if not entry.get():
+				notNull = False
+		for entry in self.ownerEntries:
+			if entry.get() == "null":
+				notNull = False    
+		if notNull:
+			validation = self.validateForm(querry)
+		else:
+			print("Can't be null")
+
 		if validation:
 			self.submitOwnerButton.config(state=DISABLED)
-			#self.displayResults("Success", 40, 0)
+
 			self.makePersonalForm(self.frame)
 			self.displayResults("Please Enter Personal Information", 39, 1)
 
@@ -87,7 +108,41 @@ class VehicleRegPage(object):
 			self.submitButton2.grid(row=50, column=1)
 
 	def finalCallback(self):
-		print("FINAL CALLBACK") 
+		print("FINAL CALLBACK")
+		n=0
+		for entry in self.personalEntries:
+			self.personalFormData[self.personalFormText[n]] = entry.get()			
+			if not entry.get():
+				entry.insert(0,"null")
+			n+=1
+
+		notNull = True
+		# check for null entries
+		if self.personalEntries[0].get() == "null" or not self.personalEntries[0].get():
+			print("can't be null")
+			notNull = False
+		data1 = [(self.formData["serial_no"], self.formData["maker"], self.formData["model"], self.formData["year"], self.formData["color"],self.formData["type_id"])]
+		data2 = [(self.ownerFormData["owner_id"], self.ownerFormData["vehicle_id"], self.ownerFormData["is_primary_owner"])]		
+		data3 = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]	
+		#vehicle( serial_no, maker, model, year, color, type_id )
+		#owner(owner_id, vehicle_id, is_primary_owner)
+		#people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday )
+		
+		if notNull == True:
+			session.db.curs.executemany("INSERT INTO vehicle( serial_no, maker, model, year, color, type_id) " 
+					"VALUES(:1, :2, :3, :4, :5, :6)", data1 )
+
+			session.db.curs.executemany("INSERT INTO people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday) " 
+					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data3 )
+
+
+			session.db.curs.executemany("INSERT INTO owner( owner_id, vehicle_id, is_primary_owner) " 
+					"VALUES(:1, :2, :3)", data2 )
+
+
+			session.db.connection.commit()
+			self.successor = 0;
+			self.quit()
 	
 	def displayResults(self, text, row, column):
 		resultText = text
@@ -123,7 +178,7 @@ class VehicleRegPage(object):
 			baseRow += 1
 	
 	def makePersonalForm(self, parent):
-		self.personalFormText = ["sin", "name", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
+		self.personalFormText = ["sin", "name", "height", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
 		
 		baseRow = 30
 		self.personalEntries = []
