@@ -35,7 +35,7 @@ class VehicleRegPage(object):
 		for entry in self.entries:
 			self.formData[self.formText[n]] = entry.get()
 			n+=1
-		#print(self.formData)
+
 		querry = "SELECT serial_no FROM vehicle where serial_no = '" + str(self.formData["serial_no"] )+ "'"     
 		validation = False
 		notNull = True
@@ -138,7 +138,6 @@ class VehicleRegPage(object):
 
 			session.db.curs.executemany("INSERT INTO owner( owner_id, vehicle_id, is_primary_owner) " 
 					"VALUES(:1, :2, :3)", data2 )
-
 
 			session.db.connection.commit()
 			self.successor = 0;

@@ -12,17 +12,13 @@ class DriverLicencePage(object):
 	def __init__(self, master):
 		frame = Frame(master, width = 500, height = 500)
 		frame.grid()
+		self.frame = frame
 		self.successor = -1
 		self.formData = {}
 
-		self.frame = frame
 		self.formText = ["licence_no","sin","class","photo name","issuing_date", "expiring_date"]
 		self.forms = self.makeForm(frame)
-
-		self.entries[2].insert(0, "null")
-		self.entries[3].insert(0, "mugshot.png")
-		self.entries[4].insert(0, "null")
-		self.entries[5].insert(0, "null")
+		self.entries[3].insert(0, "photo.png")
 
 		self.pageTitle = self.makeTitle(frame, "New Driver Licence", 0, 1)
 
@@ -48,13 +44,29 @@ class DriverLicencePage(object):
 
 			self.formData[self.formText[n]] = entry.get()           
 			n +=1
-		print(self.formData)
-
-		rsRows = session.db.execute_sql("SELECT * FROM TOFFEES")
-		for row in rsRows:
-			print(row)
+		#drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date)
+		query = "SELECT licence_no FROM drive_licence where licence_no = '" + str(self.formData["licence_no"] ) + "'"
+		if(self.validateForm(query)):
+			data = [(self.formData["licence_no"], self.formData["sin"], self.formData["class"], self.image, self.formData["issuing_date"],self.formData["expiring_date"])]		 	
+			session.db.curs.executemany("INSERT INTO drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date) " 
+					"VALUES(:1, :2, :3, :4, :5, :6)", data)			
+			print("Transaction complete")
+			
+			session.db.connection.commit()
+			# GO Home
+			self.successor = 0;
+			self.quit()
+		else:
+			print("licence number already exists")
 		
-
+	def validateForm(self, statement):                  
+		rs = session.db.execute_sql(statement)
+		print("rs: "+ str(rs))              
+		if not rs:      
+			print("NONE")           
+			return True
+		else: return False
+		
 	def makeButton(self, parent, caption, width, row, column):
 		button = Button(parent, text=caption, command=submitCallback)
 		button.grid(row=row, column=column)
