@@ -3,7 +3,17 @@ import quit
 import session
 
 class VehicleRegPage(object):
-	"""docstring for ClassName"""
+	"""docstring for ClassName
+		Page process flow: 
+			1. Check serial_no is not already in database
+			2. Check owner is in database
+				2.1. TRUE: --> Finalize
+				2.2. FALSE: --> Add person in database
+					2.2.1. Add in people table
+					2.2.2. Add in owner table.
+					2.2.3. --> Finalize
+			3. Finalze
+	"""
 	def __init__(self, master):
 		frame = Frame(master, width = 500, height = 500)
 		frame.grid()
@@ -12,28 +22,33 @@ class VehicleRegPage(object):
 		self.newOwnerIndex = 20
 		self.addOwnerFormText = []
 		self.addOwnerEntries = []
-		
+		self.sin = {}
+
 		self.formData = {}
 		self.ownerFormData = {}
 		self.personalFormData = {}
+		self.additionalOwnerFormData = {}
+		self.numForms = 0
+		self.nextButton = None
+
 		self.formText = ["serial_no", "maker", "model", "year", "color", "type_id"]
 		self.makeForm(frame)
 		self.pageTitle = self.makeTitle(frame, "Register a New Vehicle", 0, 1)
 
-		self.submitButton = Button(frame, text="Submit", command=self.submitCB)
+		self.submitButton = Button(frame, text="Submit", command=self.submitVehicleCallback)
 		self.submitButton.grid(row=10, column=1)
 
-		self.homeButton = Button(frame, text="Home", command=self.homeCB)
+		self.homeButton = Button(frame, text="Home", command=self.homeCallback)
 		self.homeButton.grid(row=10, column=2)
 
 		self.quitButton = Button(frame, text="Quit", command=lambda:quit.quit_callback(self.frame))
 		self.quitButton.grid(row=10, column=0)
 	
-	def homeCB(self):
+	def homeCallback(self):
 
 		self.successor = 0
 
-	def submitCB(self):
+	def submitVehicleCallback(self):
 		n=0
 		for entry in self.entries:
 			self.formData[self.formText[n]] = entry.get()
@@ -61,12 +76,12 @@ class VehicleRegPage(object):
 			self.submitButton.config(state=DISABLED)
 
 			self.makeOwnerForm(self.frame)
-			self.displayResults("Please Enter Owner Information", 23, 1)
+			self.displayText("Please Enter Owner Information", 23, 1)
 
 			self.ownerEntries[1].insert(0, self.formData["serial_no"])
 
-			self.submitOwnerButton = Button(self.frame, text="Add Owner", command=self.AddNewOwner)
-			self.submitOwnerButton.grid(row=20, column=2)
+			self.addOwnerButton = Button(self.frame, text="Add Owner", command=self.AddNewOwner)
+			self.addOwnerButton.grid(row=20, column=2)
 		
 			self.submitOwnerButton = Button(self.frame, text="Submit Owner Data", command=self.submitOwnerCallback)
 			self.submitOwnerButton.grid(row=24, column=1)
@@ -83,79 +98,64 @@ class VehicleRegPage(object):
 		else: return False
 
 	def submitOwnerCallback(self):
-		n=0
-		for entry in self.ownerEntries:
-			self.ownerFormData[self.ownerFormText[n]] = entry.get()
-			n+=1
-		querry = "SELECT sin from people where sin = " + str(self.ownerFormData["owner_id"])
-		validation = False
-		notNull = True
+		self.addOwnerButton.config(state=DISABLED)
+		self.submitOwnerButton.config(state=DISABLED)
+		self.fetchOwnerFormData()
+		self.fetchAdditionalOwnerFormData()
+		self.sin[self.ownerFormData["owner_id"]] = []
 
-		for entry in self.ownerEntries:
-			if not entry.get():
-				notNull = False
-		for entry in self.ownerEntries:
-			if entry.get() == "null":
-				notNull = False    
-		if notNull:
-			validation = self.validateForm(querry)
-		else:
-			print("Can't be null")
+		# Grab id from additional owners
+		for entry in self.addOwnerEntries:
+			self.sin[entry.get()] = []
 
-		if validation:
-			self.submitOwnerButton.config(state=DISABLED)
+		self.validateOwner()
 
-			self.makePersonalForm(self.frame)
-			self.displayResults("Please Enter Personal Information", 39, 1)
+		for value in self.sin.values():
+			if not value[0]:
+				self.numForms += 1
 
-			self.personalEntries[0].insert(0, self.ownerFormData["owner_id"])
+		print("Number of forms: " + str( self.numForms))
+		if self.numForms > 0:
+			# make form
+			self.makePersonalForm(self.frame, 30)
 
-			self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.finalCallback)
-			self.submitButton2.grid(row=50, column=1)
 
-	def finalCallback(self):
-		print("FINAL CALLBACK")
-		n=0
-		for entry in self.personalEntries:
-			self.personalFormData[self.personalFormText[n]] = entry.get()			
-			if not entry.get():
-				entry.insert(0,"null")
-			n+=1
+	def submitPersonalCallback(self):
+		print("Last Step")
+
+		for key, value in self.sin.items():
+			print(key, value)
 
 		notNull = True
+
 		# check for null entries
 		if self.personalEntries[0].get() == "null" or not self.personalEntries[0].get():
-			print("can't be null")
+			print("Error: field can't be null")
 			notNull = False
-		data1 = [(self.formData["serial_no"], self.formData["maker"], self.formData["model"], self.formData["year"], self.formData["color"],self.formData["type_id"])]
-		data2 = [(self.ownerFormData["owner_id"], self.ownerFormData["vehicle_id"], "y")]		
-		data3 = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]	
-		#vehicle( serial_no, maker, model, year, color, type_id )
-		#owner(owner_id, vehicle_id, is_primary_owner)
-		#people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday )
-		
-		if notNull == True:
-			session.db.curs.executemany("INSERT INTO vehicle( serial_no, maker, model, year, color, type_id) " 
-					"VALUES(:1, :2, :3, :4, :5, :6)", data1 )
 
-			session.db.curs.executemany("INSERT INTO people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday) " 
-					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data3 )
+		notNull = False
+		if notNull:
+			
+			# Insert into vehicle table
+			self.updateVehicle()
+			
+			# Insert into people table
+			self.updatePeople()
 
-
-			session.db.curs.executemany("INSERT INTO owner( owner_id, vehicle_id, is_primary_owner) " 
-					"VALUES(:1, :2, :3)", data2 )
+			# Insert into Owner table
+			self.updateOwner()
 
 			session.db.connection.commit()
-			self.successor = 0;
+			self.successor = 0; # Go back home after
 			self.quit()
 	
-	def displayResults(self, text, row, column):
+	def displayText(self, text, row, column):
 		resultText = text
 		self.searchResults = Label(self.frame, text=resultText)
 		self.searchResults.grid(row=row, column=column)
 
 	def makeButton(self, parent, caption, width, row, column):
-		button = Button(parent, text=caption, command=submitCallback)
+		button = Button(parent, text=caption)
 		button.grid(row=row, column=column)
 		return button
 
@@ -182,7 +182,7 @@ class VehicleRegPage(object):
 			self.entries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
 			baseRow += 1
 	
-	def makePersonalForm(self, parent):
+	def makePersonalForm(self, parent, baseRow):
 		self.personalFormText = ["sin", "name", "height", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
 		
 		baseRow = 30
@@ -190,6 +190,44 @@ class VehicleRegPage(object):
 		for text in self.personalFormText:
 			self.personalEntries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
 			baseRow += 1  
+
+		self.nextButton = self.makeButton(self.frame, "Finalize", 10, 50, 2)
+		if self.numForms > 0:
+			self.nextButton.config(command=self.saveAndClear, text="Next")
+		else:
+			self.nextButton.config(command=self.submitPersonalCallback)
+
+	def saveAndClear(self):
+		"""
+			sin: {1:[False], 2: [False]}
+					{1:["", "" ...], 2: [False]}
+		"""
+		#print(self.personalEntries[1].get())
+		found = False
+		for key in self.sin.keys():
+			if (( not self.sin[key][0] ) and ( not found ) ):
+				self.sin[key] = []
+
+				for entry in self.personalEntries:
+					self.sin[key].append(entry.get())
+
+				found = True
+				print(key, self.sin[key])
+
+		if self.numForms == 1:
+			self.submitPersonalCallback()
+
+		if self.numForms == 2:
+			self.nextButton.config(text="Finalize")
+			self.numForms -= 1
+		
+		else:
+			#clear forms
+			self.numForms -= 1
+		
+		for entry in self.personalEntries:
+			entry.delete(0,END)
+
 
 	def makeOwnerForm(self, parent):
 		self.ownerFormText = ["owner_id", "vehicle_id"]
@@ -205,3 +243,65 @@ class VehicleRegPage(object):
 		self.addOwnerFormText.append(text)
 		self.addOwnerEntries.append(self.makeentry(self.frame, text, 40, self.newOwnerIndex, [3,4])) 
 		self.newOwnerIndex += 1
+
+	def updatePeople(self):
+		"""
+			build 
+		"""
+		data = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]		
+		
+		session.db.curs.executemany("INSERT INTO people( sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday) " 
+					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data )
+		
+	def updateOwner(self):
+		data = [(self.ownerFormData["owner_id"], self.ownerFormData["vehicle_id"], "y")]
+
+		session.db.curs.executemany("INSERT INTO owner( owner_id, vehicle_id, is_primary_owner) " 
+					"VALUES(:1, :2, :3)", data )
+
+	def updateVehicle(self):
+		data = [(self.formData["serial_no"], self.formData["maker"], self.formData["model"], self.formData["year"], self.formData["color"],self.formData["type_id"])]
+
+		session.db.curs.executemany("INSERT INTO vehicle( serial_no, maker, model, year, color, type_id) " 
+					"VALUES(:1, :2, :3, :4, :5, :6)", data )
+
+	def fetchOwnerFormData(self):
+		n=0
+		for entry in self.ownerEntries:
+			self.ownerFormData[self.ownerFormText[n]] = entry.get()
+			n+=1
+
+	def fetchAdditionalOwnerFormData(self):
+		n=0
+		for entry in self.addOwnerEntries:
+			self.additionalOwnerFormData[self.addOwnerFormText[n]] = entry.get()
+			n+=1
+
+	def fetchPersonalFormData(self):
+		n=0
+		for entry in self.personalEntries:
+			self.personalFormData[self.personalFormText[n]] = entry.get()			
+			if not entry.get():
+				entry.insert(0,"null")
+			n+=1
+
+	def addPersonalData(self):
+		self.submitOwnerButton.config(state=DISABLED)
+
+		self.makePersonalForm(self.frame, 30)
+		self.displayText("Please Enter Personal Information", 39, 1)
+
+		#Copy owner_id to SIN field of people 
+		self.personalEntries[0].insert(0, self.ownerFormData["owner_id"])
+
+		self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.submitPersonalCallback)
+		self.submitButton2.grid(row=50, column=1)		
+
+	def validateOwner(self):
+		for key in self.sin.keys():
+			query = "SELECT sin from people where sin = " + str(key)
+			if (self.validateForm(query)):
+				self.sin[key].append(False) # not in database
+			else:
+				self.sin[key].append(True) # in database
+		

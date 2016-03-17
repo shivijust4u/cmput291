@@ -54,7 +54,7 @@ class AutoTransactionPage(object):
 		sellerValid = self.validateForm("SELECT sin FROM people where sin = '" + str(self.formData["seller_id"] )+ "'")
 		vehicleValid = self.validateForm("SELECT serial_no FROM vehicle where serial_no = '" + str(self.formData["vehicle_id"] )+ "'")
 
-		if (self.validateForm(query) and self.checkOwnership() and buyerValid and sellerValid and vehicleValid): # Transaction ID is okay
+		if (self.validateForm(query) and self.checkOwnership() and  not buyerValid and not sellerValid and not vehicleValid): # Transaction ID is okay
 			#id was not in database and can be used
 			# prepare statement to insert new row
 			self.submitSale()
@@ -68,6 +68,7 @@ class AutoTransactionPage(object):
 		elif(not self.checkOwnership()):
 			print("Seller does not own the vehicle")
 		else:
+			print("Buyer not in database")
 			self.makePersonalForm(self.frame)
 			self.displayResults("Please Enter Buyer's Personal Information", 39, 1)
 
