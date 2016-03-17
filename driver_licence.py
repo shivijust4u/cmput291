@@ -15,6 +15,7 @@ class DriverLicencePage(object):
 		self.frame = frame
 		self.successor = -1
 		self.formData = {}
+		self.personalFormData = {}
 
 		self.formText = ["licence_no","sin","class","photo name","issuing_date", "expiring_date"]
 		self.forms = self.makeForm(frame)
@@ -45,20 +46,27 @@ class DriverLicencePage(object):
 			self.formData[self.formText[n]] = entry.get()           
 			n +=1
 		#drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date)
-		query = "SELECT licence_no FROM drive_licence where licence_no = '" + str(self.formData["licence_no"] ) + "'"
-		if(self.validateForm(query)):
-			data = [(self.formData["licence_no"], self.formData["sin"], self.formData["class"], self.image, self.formData["issuing_date"],self.formData["expiring_date"])]		 	
-			session.db.curs.executemany("INSERT INTO drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date) " 
-					"VALUES(:1, :2, :3, :4, :5, :6)", data)			
-			print("Transaction complete")
+		licenceAvailable = self.validateForm("SELECT licence_no FROM drive_licence where licence_no = '" + str(self.formData["licence_no"] ) + "'")
+		personValid = self.validateForm("SELECT sin FROM people where sin = '" + str(self.formData["sin"] )+ "'")
+		noLicence = self.validateForm("SELECT licence_no FROM drive_licence where sin = '" + str(self.formData["sin"] )+ "'")
+
+		if(licenceAvailable and not personValid and noLicence):
+			self.submitLicense()
 			
-			session.db.connection.commit()
-			# GO Home
-			self.successor = 0;
-			self.quit()
-		else:
+		elif (not noLicence):
+			print("Person already has licence")
+		elif (not licenceAvailable):
 			print("licence number already exists")
-		
+		else:
+			print("Person does no exist in database")
+			self.makePersonalForm(self.frame)
+			self.displayResults("Please Enter Buyer's Personal Information", 39, 1)
+
+			self.personalEntries[0].insert(0, self.formData["sin"])
+
+			self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.submitPersonal)
+			self.submitButton2.grid(row=50, column=1)
+
 	def validateForm(self, statement):                  
 		rs = session.db.execute_sql(statement)
 		print("rs: "+ str(rs))              
@@ -94,5 +102,57 @@ class DriverLicencePage(object):
 
 	def quit(self):
 		self.frame.destroy()
+
+	def makePersonalForm(self, parent):
+		self.personalFormText = ["sin", "name", "height", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
+		
+		baseRow = 30
+		self.personalEntries = []
+		for text in self.personalFormText:
+			self.personalEntries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
+			baseRow += 1  
+
+	def submitLicense(self):
+		data = [(self.formData["licence_no"], self.formData["sin"], self.formData["class"], self.image, self.formData["issuing_date"],self.formData["expiring_date"])]		 	
+		session.db.curs.executemany("INSERT INTO drive_licence(licence_no,sin,class,photo,issuing_date,expiring_date) " 
+				"VALUES(:1, :2, :3, :4, :5, :6)", data)			
+		print("Licence Registered!")
+		
+		session.db.connection.commit()
+		# GO Home
+		self.successor = 0;
+		self.quit()
+
+	def submitPersonal(self):
+		n=0
+		submitted_person = False
+		for entry in self.personalEntries:
+			self.personalFormData[self.personalFormText[n]] = entry.get()			
+			if not entry.get():
+				entry.insert(0,"null")
+			n+=1
+
+		notNull = True
+		# check for null entries
+		if self.personalEntries[0].get() == "null" or not self.personalEntries[0].get():
+			print("can't be null")
+			notNull = False
+
+		data3 = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]
+
+		if notNull == True:
+			session.db.curs.executemany("INSERT INTO people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday) " 
+					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data3 )
+
+			print("Person Registered!")
+			submitted_person = True
+
+		if submitted_person:
+			self.submitLicense()
+
+	def displayResults(self, text, row, column):
+		resultText = text
+		self.searchResults = Label(self.frame, text=resultText)
+		self.searchResults.grid(row=row, column=column)			
 
 
