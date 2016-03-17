@@ -9,6 +9,9 @@ class VehicleRegPage(object):
 		frame.grid()
 		self.frame = frame
 		self.successor = -1
+		self.newOwnerIndex = 20
+		self.addOwnerFormText = []
+		self.addOwnerEntries = []
 		
 		self.formData = {}
 		self.ownerFormData = {}
@@ -58,12 +61,15 @@ class VehicleRegPage(object):
 			self.submitButton.config(state=DISABLED)
 
 			self.makeOwnerForm(self.frame)
-			self.displayResults("Please Enter Owner Information", 25, 1)
+			self.displayResults("Please Enter Owner Information", 23, 1)
 
 			self.ownerEntries[1].insert(0, self.formData["serial_no"])
+
+			self.submitOwnerButton = Button(self.frame, text="Add Owner", command=self.AddNewOwner)
+			self.submitOwnerButton.grid(row=20, column=2)
 		
 			self.submitOwnerButton = Button(self.frame, text="Submit Owner Data", command=self.submitOwnerCallback)
-			self.submitOwnerButton.grid(row=29, column=1)
+			self.submitOwnerButton.grid(row=24, column=1)
 		elif notNull:
 			print("Vehicle already registered")
 		
@@ -122,7 +128,7 @@ class VehicleRegPage(object):
 			print("can't be null")
 			notNull = False
 		data1 = [(self.formData["serial_no"], self.formData["maker"], self.formData["model"], self.formData["year"], self.formData["color"],self.formData["type_id"])]
-		data2 = [(self.ownerFormData["owner_id"], self.ownerFormData["vehicle_id"], self.ownerFormData["is_primary_owner"])]		
+		data2 = [(self.ownerFormData["owner_id"], self.ownerFormData["vehicle_id"], "y")]		
 		data3 = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]	
 		#vehicle( serial_no, maker, model, year, color, type_id )
 		#owner(owner_id, vehicle_id, is_primary_owner)
@@ -186,10 +192,16 @@ class VehicleRegPage(object):
 			baseRow += 1  
 
 	def makeOwnerForm(self, parent):
-		self.ownerFormText = ["owner_id", "vehicle_id", "is_primary_owner"]
+		self.ownerFormText = ["owner_id", "vehicle_id"]
 		baseRow = 20
 		self.ownerEntries = []
 		for text in self.ownerFormText:
 			self.ownerEntries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
-			baseRow += 1           
+			baseRow += 1       
 
+	def AddNewOwner(self):
+		print("Owner Added")
+		text = "Additional Owner " + str(self.newOwnerIndex-19)
+		self.addOwnerFormText.append(text)
+		self.addOwnerEntries.append(self.makeentry(self.frame, text, 40, self.newOwnerIndex, [3,4])) 
+		self.newOwnerIndex += 1

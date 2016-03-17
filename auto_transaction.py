@@ -18,6 +18,7 @@ class AutoTransactionPage(object):
 		
 		#This is where the user entered data gets stored
 		self.formData = {}
+		self.personalFormData = {}
 		
 		self.formText = ["transaction_id", "seller_id","buyer_id", "vehicle_id","s_date","price", "is_primary_owner"]
         
@@ -49,26 +50,32 @@ class AutoTransactionPage(object):
 				n += 1
 		#check transaction_id is unique:
 		query = "SELECT transaction_id FROM auto_sale where transaction_id = '" + str(self.formData["transaction_id"] )+ "'"
-		
-		if (self.validateForm(query) and self.checkOwnership()): # Transaction ID is okay
+		buyerValid = self.validateForm("SELECT sin FROM people where sin = '" + str(self.formData["buyer_id"] )+ "'")
+		sellerValid = self.validateForm("SELECT sin FROM people where sin = '" + str(self.formData["seller_id"] )+ "'")
+		vehicleValid = self.validateForm("SELECT serial_no FROM vehicle where serial_no = '" + str(self.formData["vehicle_id"] )+ "'")
+
+		if (self.validateForm(query) and self.checkOwnership() and buyerValid and sellerValid and vehicleValid): # Transaction ID is okay
 			#id was not in database and can be used
 			# prepare statement to insert new row
+			self.submitSale()
 			
-			data = [(self.formData["transaction_id"], self.formData["seller_id"], self.formData["buyer_id"], self.formData["vehicle_id"], self.formData["s_date"],self.formData["price"])]		 	
-			session.db.curs.executemany("INSERT INTO auto_sale(transaction_id,seller_id, buyer_id, vehicle_id, s_date, price) " 
-					"VALUES(:1, :2, :3, :4, :5, :6)", data)
-			self.updateOwner()			
-			
-			print("Transaction complete")
-			
-			session.db.connection.commit()
-			self.successor = 0;
-			self.quit()
 		elif( not self.validateForm(query)):
 			print("transaction_id already exists")
-			
-		else:
+		elif( sellerValid ):
+			print("Seller does not exist")
+		elif(vehicleValid):
+			print("Vehicle not registered")	
+		elif(not self.checkOwnership()):
 			print("Seller does not own the vehicle")
+		else:
+			self.makePersonalForm(self.frame)
+			self.displayResults("Please Enter Buyer's Personal Information", 39, 1)
+
+			self.personalEntries[0].insert(0, self.formData["buyer_id"])
+
+			self.submitButton2 = Button(self.frame, text="Submit Personal Data", command=self.submitPersonal)
+			self.submitButton2.grid(row=50, column=1)
+			#buyer doesnt exist and needs to be added
 		# delete previous owner entry in database
 		# update new owner entry in database
          
@@ -79,6 +86,7 @@ class AutoTransactionPage(object):
 			print("NONE")           
 			return True
 		else: return False
+
 	
 	def checkOwnership(self):
 		query = "SELECT * FROM owner where owner_id = " + self.formData["seller_id"] +  " and vehicle_id = " + self.formData["vehicle_id"]  	
@@ -136,3 +144,56 @@ class AutoTransactionPage(object):
 	def quit(self):
 		self.frame.destroy()
 
+
+	def makePersonalForm(self, parent):
+		self.personalFormText = ["sin", "name", "height", "weight", "eyecolor", "haircolor", "addr", "gender", "birthday"]
+		
+		baseRow = 30
+		self.personalEntries = []
+		for text in self.personalFormText:
+			self.personalEntries.append(self.makeentry(parent, text, 40, baseRow, [0,1]),)
+			baseRow += 1  
+
+	def submitSale(self):
+		data = [(self.formData["transaction_id"], self.formData["seller_id"], self.formData["buyer_id"], self.formData["vehicle_id"], self.formData["s_date"],self.formData["price"])]		 	
+		session.db.curs.executemany("INSERT INTO auto_sale(transaction_id,seller_id, buyer_id, vehicle_id, s_date, price) " 
+				"VALUES(:1, :2, :3, :4, :5, :6)", data)
+		self.updateOwner()			
+		
+		print("Transaction complete")
+		
+		session.db.connection.commit()
+		self.successor = 0;
+		self.quit()
+
+	def submitPersonal(self):
+		n=0
+		submitted_person = False
+		for entry in self.personalEntries:
+			self.personalFormData[self.personalFormText[n]] = entry.get()			
+			if not entry.get():
+				entry.insert(0,"null")
+			n+=1
+
+		notNull = True
+		# check for null entries
+		if self.personalEntries[0].get() == "null" or not self.personalEntries[0].get():
+			print("can't be null")
+			notNull = False
+
+		data3 = [(self.personalFormData["sin"], self.personalFormData["name"], self.personalFormData["height"], self.personalFormData["weight"], self.personalFormData["eyecolor"],self.personalFormData["haircolor"],self.personalFormData["addr"],self.personalFormData["gender"],self.personalFormData["birthday"])]
+
+		if notNull == True:
+			session.db.curs.executemany("INSERT INTO people( sin, name, height,weight,eyecolor, haircolor,addr,gender,birthday) " 
+					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data3 )
+
+			print("Buyer Registered!")
+			submitted_person = True
+
+		if submitted_person:
+			self.submitSale()
+
+	def displayResults(self, text, row, column):
+		resultText = text
+		self.searchResults = Label(self.frame, text=resultText)
+		self.searchResults.grid(row=row, column=column)			
