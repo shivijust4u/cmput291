@@ -16,7 +16,7 @@ class Database():
 		#pw = getpass.getpass()
 
 		# The URL we are connnecting to
-		conString=''+"dfagnan" +'/' + "Costaece963" +'@gwynne.cs.ualberta.ca:1521/CRS'
+		conString=''+"" +'/' + "" +'@gwynne.cs.ualberta.ca:1521/CRS'
 		
 		self.connection = cx_Oracle.connect(conString)
 
@@ -72,15 +72,3 @@ class Database():
 			return [None, None]
 
 
-	def updatePeople(self, data):
-		"""
-			build 
-		"""
-		try:
-			self.curs.executemany("INSERT INTO people( sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday) " 
-					"VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9)", data )
-		except cx_Oracle.DatabaseError as exc:
-			error, = exc.args
-			print( sys.stderr, "Oracle code:", error.code)
-			print( sys.stderr, "Oracle message:", error.message)
-			return [None, None]
