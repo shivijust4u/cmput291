@@ -16,7 +16,7 @@ class Database():
 		#pw = getpass.getpass()
 
 		# The URL we are connnecting to
-		conString=''+"" +'/' + "" +'@gwynne.cs.ualberta.ca:1521/CRS'
+		conString=''+"dfagnan" +'/' + "" +'@gwynne.cs.ualberta.ca:1521/CRS'
 		
 		self.connection = cx_Oracle.connect(conString)
 
@@ -31,9 +31,9 @@ class Database():
 	def passive_update(self, statement):
 
 		try:        
-			curs = self.connection.cursor()
+			#curs = self.connection.cursor()
 			# Execute the desired statement 
-			curs.execute(statement)
+			self.curs.execute(statement)
 			self.connection.commit()
 			return True
 
