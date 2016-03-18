@@ -60,21 +60,9 @@ class ViolationRecordPage(object):
 				rs = session.db.execute_sql(query)
 				print("Results: " + str(rs))
 
-			#statement = "insert into ticket values('" + self.formData["ticket_no"] +"', '" +  self.formData["violator_no"]  +"', '" +  self.formData["vehicle_id"] +"', '" +  self.formData["office_no"] +"', '" +  self.formData["vtype"] + "', '" +  self.formData["vdate"] +"', '" +  self.formData["place"] +"', '" +  self.formData["descriptions"] + "')"
-			#print(statement)			
-			#session.db.passive_update(statement)
 		
 			self.updateViolation()
 			
-			#print("step 1")
-			#data = (self.formData["ticket_no"], self.formData["violator_no"], self.formData["vehicle_id"], self.formData["office_no"], self.formData["vtype"], self.formData["vdate"], self.formData["place"], self.formData["descriptions"])		 	
-			#print("step 2")			
-			#session.db.curs.executemany("INSERT INTO ticket(ticket_no, violator_no,vehicle_id, office_no, vtype, vdate, place, descriptions) " 
-			#		"VALUES(:1, :2, :3, :4, :5, :6, :7, :8)", data)
-			
-			#print("INSERT INTO ticket(ticket_no, violator_no,vehicle_id, office_no, vtype, vdate, place, descriptions) " 
-			#		"VALUES(:1, :2, :3, :4, :5, :6, :7, :8)", data)
-			#print("Insert complete")
 
 			session.db.connection.commit()
 			self.successor = 0;

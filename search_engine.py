@@ -88,6 +88,8 @@ class GeneralSearchPage(object):
 
         self.resultText = ["name: \n", "licence_no: \n", "addr: \n","birthday: \n","class: \n", "driving_condition: \n", "expires: "]
 
+        self.resultLabels = ["name: ", "licence_no: ", "addr: " , "birthday: " , , , , ,  ]
+
         self.formText = ["licence_no","given name"]
         self.makeForm(self.frame)
 
